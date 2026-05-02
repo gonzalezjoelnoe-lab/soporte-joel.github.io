@@ -1,75 +1,543 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Soporte Técnico Joel</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #0f172a;
-            color: white;
-            text-align: center;
-        }
-        header {
-            background: #1e293b;
-            padding: 20px;
-        }
-        h1 {
-            margin: 0;
-            color: #38bdf8;
-        }
-        section {
-            padding: 20px;
-        }
-        .card {
-            background: #1e293b;
-            margin: 10px;
-            padding: 15px;
-            border-radius: 10px;
-        }
-        .btn {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 20px;
-            background: #22c55e;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-        .btn:hover {
-            background: #16a34a;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soluciones Informáticas JN</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Exo+2:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cyan: #3ecfde;
+    --cyan-dark: #28a8b8;
+    --cyan-glow: rgba(62,207,222,0.25);
+    --black: #000000;
+    --black-soft: #0a0a0a;
+    --black-card: #0f0f0f;
+    --black-border: #1a1a1a;
+    --white: #ffffff;
+    --white-dim: rgba(255,255,255,0.75);
+    --white-faint: rgba(255,255,255,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Exo 2', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE TEXTURE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.4;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--black-border);
+  }
+  .nav-logo {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--cyan); letter-spacing: 2px;
+  }
+  .nav-logo span { color: var(--white); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--white-dim); text-decoration: none;
+    font-size: 0.9rem; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+  .nav-wa {
+    background: var(--cyan); color: var(--black);
+    padding: .5rem 1.2rem; border-radius: 4px;
+    font-weight: 700; font-size: .85rem; letter-spacing: 1px;
+    text-decoration: none; text-transform: uppercase;
+    transition: background .2s, transform .15s;
+  }
+  .nav-wa:hover { background: #5adae8; transform: translateY(-1px); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 2px; background: var(--cyan); border-radius: 2px; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 8rem 1.5rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(62,207,222,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(62,207,222,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridDrift 20s linear infinite;
+  }
+  @keyframes gridDrift { from { background-position: 0 0; } to { background-position: 60px 60px; } }
+  .hero-glow {
+    position: absolute; top: 30%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(62,207,222,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-logo-img {
+    width: 160px; height: auto;
+    filter: drop-shadow(0 0 24px rgba(62,207,222,0.5));
+    animation: pulse 3s ease-in-out infinite;
+    position: relative; z-index: 1;
+  }
+  @keyframes pulse { 0%,100%{filter:drop-shadow(0 0 16px rgba(62,207,222,.4))} 50%{filter:drop-shadow(0 0 36px rgba(62,207,222,.75))} }
+  .hero h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(2.5rem, 8vw, 5.5rem);
+    font-weight: 700; line-height: 1;
+    margin: 1.5rem 0 .5rem;
+    position: relative; z-index: 1;
+  }
+  .hero h1 .cyan { color: var(--cyan); }
+  .hero-sub {
+    font-size: clamp(1rem, 3vw, 1.4rem);
+    color: var(--white-dim); letter-spacing: 3px;
+    text-transform: uppercase; margin-bottom: 1rem;
+    position: relative; z-index: 1;
+  }
+  .diag-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: rgba(62,207,222,0.12);
+    border: 1px solid var(--cyan);
+    color: var(--cyan); padding: .6rem 1.4rem;
+    border-radius: 50px; font-size: .9rem; font-weight: 600;
+    letter-spacing: 1px; margin: 1.5rem 0 2.5rem;
+    position: relative; z-index: 1;
+    animation: badgePop .6s ease .3s both;
+  }
+  @keyframes badgePop { from{opacity:0;transform:scale(.8)} to{opacity:1;transform:scale(1)} }
+  .hero-cta {
+    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    position: relative; z-index: 1;
+  }
+  .btn-primary {
+    background: var(--cyan); color: var(--black);
+    padding: .85rem 2rem; border-radius: 6px;
+    font-weight: 800; font-size: 1rem; letter-spacing: 1px;
+    text-decoration: none; text-transform: uppercase;
+    transition: all .2s; border: 2px solid var(--cyan);
+    box-shadow: 0 0 20px rgba(62,207,222,0.3);
+  }
+  .btn-primary:hover { background: transparent; color: var(--cyan); box-shadow: 0 0 30px rgba(62,207,222,.5); }
+  .btn-secondary {
+    background: transparent; color: var(--white);
+    padding: .85rem 2rem; border-radius: 6px;
+    font-weight: 700; font-size: 1rem; letter-spacing: 1px;
+    text-decoration: none; text-transform: uppercase;
+    border: 2px solid var(--white-faint);
+    transition: all .2s;
+  }
+  .btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  /* ─── SECTIONS ─── */
+  section { padding: 5rem 1.5rem; position: relative; z-index: 1; }
+  .section-label {
+    text-align: center; margin-bottom: 3.5rem;
+  }
+  .section-label .tag {
+    display: inline-block;
+    color: var(--cyan); font-size: .78rem; font-weight: 700;
+    letter-spacing: 4px; text-transform: uppercase;
+    margin-bottom: .75rem;
+  }
+  .section-label h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700; line-height: 1.1;
+  }
+  .section-label p {
+    color: var(--white-dim); margin-top: .75rem;
+    font-size: 1rem; max-width: 520px; margin-inline: auto;
+  }
+  .divider {
+    width: 60px; height: 3px;
+    background: var(--cyan);
+    margin: 1rem auto 0; border-radius: 2px;
+  }
+
+  /* ─── SERVICES GRID ─── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem; max-width: 1200px; margin: 0 auto;
+  }
+  .service-card {
+    background: var(--black-card);
+    border: 1px solid var(--black-border);
+    border-radius: 12px; padding: 1.75rem;
+    transition: border-color .25s, transform .25s, box-shadow .25s;
+    position: relative; overflow: hidden;
+  }
+  .service-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--cyan); transform: scaleX(0); transform-origin: left;
+    transition: transform .3s ease;
+  }
+  .service-card:hover { border-color: rgba(62,207,222,0.4); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(62,207,222,0.1); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .card-icon {
+    width: 48px; height: 48px;
+    background: rgba(62,207,222,0.1);
+    border-radius: 10px; display: flex;
+    align-items: center; justify-content: center;
+    margin-bottom: 1rem; font-size: 1.5rem;
+  }
+  .card-category {
+    font-size: .72rem; color: var(--cyan);
+    text-transform: uppercase; letter-spacing: 3px;
+    font-weight: 700; margin-bottom: .4rem;
+  }
+  .service-card h3 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.35rem; font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .service-list { list-style: none; }
+  .service-list li {
+    display: flex; align-items: flex-start; gap: .6rem;
+    color: var(--white-dim); font-size: .9rem;
+    padding: .35rem 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .service-list li:last-child { border-bottom: none; }
+  .service-list li .dot {
+    width: 6px; height: 6px; min-width: 6px;
+    background: var(--cyan); border-radius: 50%;
+    margin-top: .45rem;
+  }
+  .free-tag {
+    display: inline-block;
+    background: rgba(62,207,222,0.15);
+    color: var(--cyan); font-size: .72rem;
+    font-weight: 700; padding: .15rem .5rem;
+    border-radius: 4px; margin-left: .4rem;
+    border: 1px solid rgba(62,207,222,0.3);
+  }
+
+  /* ─── PACKAGES ─── */
+  #paquetes { background: var(--black-soft); }
+  .packages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem; max-width: 900px; margin: 0 auto;
+  }
+  .package-card {
+    background: var(--black-card);
+    border: 1px solid var(--black-border);
+    border-radius: 16px; padding: 2rem;
+    text-align: center; position: relative;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .package-card.featured {
+    border-color: var(--cyan);
+    box-shadow: 0 0 40px rgba(62,207,222,0.15), inset 0 0 60px rgba(62,207,222,0.03);
+  }
+  .package-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(62,207,222,0.15); }
+  .pkg-badge {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: var(--cyan); color: var(--black);
+    font-size: .72rem; font-weight: 800;
+    padding: .3rem 1rem; border-radius: 20px;
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+  .package-card h3 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.6rem; font-weight: 700; margin-bottom: .5rem;
+    color: var(--cyan);
+  }
+  .package-card .pkg-desc {
+    color: var(--white-dim); font-size: .9rem; margin-bottom: 1.5rem;
+  }
+  .pkg-includes { list-style: none; text-align: left; margin-bottom: 1.75rem; }
+  .pkg-includes li {
+    display: flex; align-items: center; gap: .75rem;
+    padding: .5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: .9rem; color: var(--white-dim);
+  }
+  .pkg-includes li:last-child { border-bottom: none; }
+  .check { color: var(--cyan); font-size: 1.1rem; font-weight: 700; }
+  .pkg-diag {
+    background: rgba(62,207,222,0.1);
+    border: 1px dashed rgba(62,207,222,0.5);
+    border-radius: 8px; padding: .75rem;
+    color: var(--cyan); font-size: .85rem; font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+  .btn-wa {
+    display: inline-flex; align-items: center; gap: .6rem;
+    background: #25D366; color: var(--white);
+    padding: .85rem 2rem; border-radius: 8px;
+    font-weight: 700; font-size: .95rem;
+    text-decoration: none; letter-spacing: .5px;
+    transition: background .2s, transform .15s;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+  }
+  .btn-wa:hover { background: #1ebe5a; transform: translateY(-2px); }
+  .wa-icon { width: 20px; height: 20px; }
+
+  /* ─── DIAG BANNER ─── */
+  .diag-banner {
+    background: linear-gradient(135deg, rgba(62,207,222,0.1) 0%, rgba(62,207,222,0.05) 100%);
+    border: 1px solid rgba(62,207,222,0.3);
+    border-radius: 16px; padding: 2.5rem;
+    max-width: 800px; margin: 0 auto;
+    text-align: center;
+  }
+  .diag-banner h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700; margin-bottom: .75rem;
+  }
+  .diag-banner h2 span { color: var(--cyan); }
+  .diag-banner p { color: var(--white-dim); margin-bottom: 2rem; font-size: 1rem; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--black-soft);
+    border-top: 1px solid var(--black-border);
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+  }
+  footer .footer-logo {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.4rem; font-weight: 700;
+    color: var(--cyan); letter-spacing: 2px;
+    margin-bottom: .75rem;
+  }
+  footer p { color: rgba(255,255,255,0.35); font-size: .82rem; }
+
+  /* ─── MOBILE NAV ─── */
+  .mobile-menu {
+    display: none; flex-direction: column;
+    position: fixed; top: 68px; left: 0; right: 0;
+    background: rgba(0,0,0,0.97);
+    border-bottom: 1px solid var(--black-border);
+    padding: 1.5rem; gap: 1rem; z-index: 99;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    color: var(--white-dim); text-decoration: none;
+    font-size: 1rem; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; padding: .5rem 0;
+    border-bottom: 1px solid var(--black-border);
+  }
+  .mobile-menu a:last-child { border-bottom: none; color: var(--cyan); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .nav-links, .nav-wa { display: none; }
+    .hamburger { display: flex; }
+    .hero { padding: 7rem 1.25rem 3rem; }
+    section { padding: 3.5rem 1.25rem; }
+  }
+
+  /* ─── SCROLL ANIMATIONS ─── */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
 </head>
 <body>
 
-<header>
-    <h1>Soporte Técnico Joel</h1>
-    <p>Reparación de computadoras y redes</p>
-</header>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">JN<span> Soluciones</span></div>
+  <ul class="nav-links">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#paquetes">Paquetes</a></li>
+    <li><a href="#diagnostico">Diagnóstico</a></li>
+  </ul>
+  <a href="https://wa.me/+526181468458?text=Hola,%20me%20interesa%20un%20servicio" class="nav-wa" target="_blank">WhatsApp</a>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
 
-<section>
-    <h2>Servicios</h2>
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#servicios" onclick="closeMenu()">Servicios</a>
+  <a href="#paquetes" onclick="closeMenu()">Paquetes</a>
+  <a href="#diagnostico" onclick="closeMenu()">Diagnóstico</a>
+  <a href="https://wa.me/+526181468458?text=Hola,%20me%20interesa%20un%20servicio" target="_blank">📲 Contactar por WhatsApp</a>
+</div>
 
-    <div class="card">💻 Formateo y optimización de computadoras</div>
-    <div class="card">🌐 Instalación y reparación de internet</div>
-    <div class="card">🔌 Ponchado de cables RJ45</div>
-    <div class="card">🖨️ Configuración de impresoras</div>
-    <div class="card">🛠️ Mantenimiento y limpieza</div>
-
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <img src="Gemini_Generated_Image_eyixi3eyixi3eyix.png" alt="Soluciones Informáticas JN" class="hero-logo-img"
+       onerror="this.style.display='none'">
+  <h1><span class="cyan">Soluciones</span><br>Informáticas JN</h1>
+  <p class="hero-sub">Olvídate de los problemas técnicos</p>
+  <div class="diag-badge">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    ✅ Diagnóstico 100% Gratis
+  </div>
+  <div class="hero-cta">
+    <a href="#servicios" class="btn-primary">Ver Servicios</a>
+    <a href="https://wa.me/+526181468458?text=Hola,%20me%20interesa%20un%20servicio" class="btn-secondary" target="_blank">📲 Contactar</a>
+  </div>
 </section>
 
-<section>
-    <h2>Contacto</h2>
-    <p>Atención rápida y confiable</p>
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div class="section-label reveal">
+    <div class="tag"></div>
+    <h2>Nuestros Servicios</h2>
+    <p>Soluciones completas en hardware, software, redes e impresoras — con diagnóstico siempre gratis.</p>
+    <div class="divider"></div>
+  </div>
 
-    <!-- CAMBIA TU NÚMERO -->
-    <a class="btn" href="https://wa.me/52618XXXXXXXX">
-        📱 Contactar por WhatsApp
+  <div class="services-grid">
+
+    <!-- Básicos -->
+    <div class="service-card reveal">
+      <div class="card-icon">💻</div>
+      <div class="card-category">Computadoras</div>
+      <h3>Servicios Básicos</h3>
+      <ul class="service-list">
+        <li><span class="dot"></span>Formateo + programas básicos</li>
+        <li><span class="dot"></span>Eliminación de archivos</li>
+        <li><span class="dot"></span>Instalación de programas</li>
+        <li><span class="dot"></span>Limpieza interna</li>
+        <li><span class="dot"></span>Respaldo de información</li>
+        <li><span class="dot"></span>Recuperación de archivos</li>
+      </ul>
+    </div>
+
+    <!-- Redes -->
+    <div class="service-card reveal">
+      <div class="card-icon">🌐</div>
+      <div class="card-category">Conectividad</div>
+      <h3>Redes & WiFi</h3>
+      <ul class="service-list">
+        <li><span class="dot"></span>Fabricación de cables de red a medida</li>
+        <li><span class="dot"></span>Instalación de red básica (por punto)</li>
+        <li><span class="dot"></span>Configuración de router / WiFi</li>
+        <li><span class="dot"></span>Diagnóstico y revisión de red <span class="free-tag">GRATIS</span></li>
+      </ul>
+    </div>
+
+    <!-- Impresoras -->
+    <div class="service-card reveal">
+      <div class="card-icon">🖨️</div>
+      <div class="card-category">Periféricos</div>
+      <h3>Impresoras</h3>
+      <ul class="service-list">
+        <li><span class="dot"></span>Instalación de impresora</li>
+        <li><span class="dot"></span>Configuración en red</li>
+        <li><span class="dot"></span>Solución de errores</li>
+      </ul>
+    </div>
+
+    <!-- Hardware -->
+    <div class="service-card reveal">
+      <div class="card-icon">🔧</div>
+      <div class="card-category">Hardware</div>
+      <h3>Hardware & Ensamble</h3>
+      <ul class="service-list">
+        <li><span class="dot"></span>Instalación de RAM o SSD</li>
+        <li><span class="dot"></span>Armado de PC</li>
+        <li><span class="dot"></span>Cambio de pasta térmica</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- PAQUETES -->
+<section id="paquetes">
+  <div class="section-label reveal">
+    <div class="tag"></div>
+    <h2>Paquetes</h2>
+    <p>Todo lo que necesitas en un solo servicio, al mejor precio.</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="packages-grid">
+    <div class="package-card featured reveal">
+      <div class="pkg-badge">⭐ Más Popular</div>
+      <h3>Paquete Todo Listo</h3>
+      <p class="pkg-desc">La solución completa para que tu computadora quede como nueva</p>
+      <ul class="pkg-includes">
+        <li><span class="check">✓</span> Formateo completo</li>
+        <li><span class="check">✓</span> Instalación de programas básicos</li>
+        <li><span class="check">✓</span> Limpieza interna del equipo</li>
+        <li><span class="check">✓</span> Diagnóstico previo al servicio</li>
+      </ul>
+      <div class="pkg-diag">🔍 El diagnóstico de tu equipo es completamente gratis</div>
+      <a href="https://wa.me/+526181468458?text=Hola,%20me%20interesa%20el%20Paquete%20Todo%20Listo%20(Formateo%20+%20Programas%20+%20Limpieza)" class="btn-wa" target="_blank">
+        <svg class="wa-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Cotizar por WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- DIAGNÓSTICO BANNER -->
+<section id="diagnostico">
+  <div class="diag-banner reveal">
+    <h2>El <span>Diagnóstico</span> es Gratis</h2>
+    <p>Llevanos tu equipo o cuéntanos tu problema — te decimos qué tiene sin costo. Solo pagas si decides hacer el servicio.</p>
+    <a href="https://wa.me/+526181468458?text=Hola,%20quiero%20un%20diagn%C3%B3stico%20gratuito%20para%20mi%20equipo" class="btn-wa" target="_blank" style="display:inline-flex;margin:0 auto;">
+      <svg class="wa-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Solicitar Diagnóstico Gratis
     </a>
+  </div>
 </section>
 
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">SOLUCIONES INFORMÁTICAS JN</div>
+  <p>© 2025 JN Soluciones Informáticas · Todos los derechos reservados</p>
+</footer>
+
+<!-- FLOATING WA BUTTON -->
+<a href="https://wa.me/+526181468458?text=Hola,%20me%20interesa%20un%20servicio" target="_blank"
+   style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:200;background:#25D366;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.5);transition:transform .2s;"
+   onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+  <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Stagger cards
+  document.querySelectorAll('.service-card, .package-card').forEach((el, i) => {
+    el.style.transitionDelay = (i * 0.08) + 's';
+  });
+</script>
 </body>
 </html>
